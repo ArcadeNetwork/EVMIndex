@@ -10,7 +10,6 @@ export async function setupListeners(contracts: Contract[]) {
   contracts.forEach((contract) => {
     const { address, abi, events, webhook, primaryProperty, model } = contract
     const contractInstance = new ethers.Contract(address, abi, provider)
-    console.log(`Listening for on ${address}`)
 
     if(!events) throw new Error('Events are required for live indexing');
     if(!webhook) throw new Error('Webhook is required for live indexing');
@@ -19,7 +18,6 @@ export async function setupListeners(contracts: Contract[]) {
 
     events.forEach((eventName) => {
       const eventFilter = contractInstance.filters[eventName]()
-      console.log("dbFilter", "adadad")
       contractInstance.on(eventFilter, async (user, token, amount, rewards) => {
         const eventParam : Record<string, string | number>= {user, token, amount, rewards, contract: address}
         const dbFilter: Record<string, string | number> = {}
@@ -27,7 +25,6 @@ export async function setupListeners(contracts: Contract[]) {
           const key: string = String(primaryProperty[i])
           dbFilter[key] = eventParam[key]
         }
-        console.log(dbFilter)
         // Update the DB with latest transfer
         await UnStake.findOneAndUpdate(
           dbFilter,
