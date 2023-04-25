@@ -10,7 +10,6 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "prettier": "prettier --write \"**/*.ts\"",
     "prettier:check": "prettier --check \"**/*.ts\"",
-    "prepare": "husky install",
     "pre-commit": "lint-staged"
   },
   "keywords": [],

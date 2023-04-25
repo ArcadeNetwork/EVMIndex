@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { Provider } from '@/config/provider'
 import { Contract } from '@/types'
-import Transfers from '@/db/models/Transfers'
+import UnStake from '@/db/models/UnStake'
 import axios from 'axios'
 
 export async function setupListeners(contracts: Contract[]) {
@@ -10,6 +10,7 @@ export async function setupListeners(contracts: Contract[]) {
   contracts.forEach((contract) => {
     const { address, abi, events, webhook, primaryProperty, model } = contract
     const contractInstance = new ethers.Contract(address, abi, provider)
+    console.log(`Listening for on ${address}`)
 
     if(!events) throw new Error('Events are required for live indexing');
     if(!webhook) throw new Error('Webhook is required for live indexing');
@@ -18,18 +19,26 @@ export async function setupListeners(contracts: Contract[]) {
 
     events.forEach((eventName) => {
       const eventFilter = contractInstance.filters[eventName]()
-      contractInstance.on(eventFilter, async (eventParam) => {
-
+      console.log("dbFilter", "adadad")
+      contractInstance.on(eventFilter, async (user, token, amount, rewards) => {
+        const eventParam : Record<string, string | number>= {user, token, amount, rewards, contract: address}
         const dbFilter: Record<string, string | number> = {}
         for (let i = 0; i < primaryProperty.length; i++) {
-          const key: string = primaryProperty[i]
+          const key: string = String(primaryProperty[i])
           dbFilter[key] = eventParam[key]
         }
+        console.log(dbFilter)
         // Update the DB with latest transfer
-        await Transfers.findOneAndUpdate(
+        await UnStake.findOneAndUpdate(
           dbFilter,
           {
-            $set: eventParam,
+            $set: {
+                user,
+                token,
+                amount: parseFloat(ethers.utils.formatEther(amount).toString()),
+                rewards: parseFloat(ethers.utils.formatEther(rewards).toString()),
+                contract: address,
+            },
           },
           {
             upsert: true,

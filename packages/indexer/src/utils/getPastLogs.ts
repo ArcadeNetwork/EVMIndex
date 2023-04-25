@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import {BigNumber, ethers} from 'ethers'
 import { Provider } from '@/config/provider'
 import { Contract } from '@/types'
 
@@ -24,17 +24,16 @@ export async function getNftTransferLogs(contracts: Contract[]) {
       const log = logs[i]
       const event = contractInstance.interface.parseLog(log)
       const transfer: Record<string, string | number> = {
-        from: event.args[0],
-        to: event.args[1],
-        tokenId: event.args[2].toString(),
-        blockNumber: log.blockNumber,
-        txHash: log.transactionHash,
+        user: event.args[0],
+        token: event.args[1],
+        amount: BigNumber.from(event.args[2]).toString(),
+        rewards: BigNumber.from(event.args[3]).toString(),
         contract: address,
       }
 
       const dbFilter: Record<string, string | number> = {}
       for (let i = 0; i < primaryProperty.length; i++) {
-        const key: string = primaryProperty[i]
+        const key: string = String(primaryProperty[i])
         dbFilter[key] = transfer[key]
       }
 
