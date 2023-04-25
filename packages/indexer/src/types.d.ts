@@ -1,5 +1,5 @@
 import {Mongoose} from "mongoose";
-import {Transfer} from "@/db/models/Transfers";
+import {Unstake} from "@/db/models/UnStake";
 
 export type Contract = {
   name: string
@@ -9,6 +9,6 @@ export type Contract = {
   events: string[]
   topic?: string,
   model: Mongoose.Model<T, {}>,
-  primaryProperty: Array<keyof Transfer>,
+  primaryProperty: Array<keyof Unstake>,
   webhook?: string
 }
