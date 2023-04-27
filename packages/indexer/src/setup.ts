@@ -7,7 +7,7 @@ export const setup: Setup = {
   contracts: [
     {
       name: 'Arcade LP Staking Contract',
-      address: '0xe187DbCDF8673B5ed3F180F4b579a9D9DE421a40',
+      address: '0x7b8eeffEB9b1AbF06fdDCE98Eed1b49B1C724Ad0',
       startBlock: 29012760,
       abi: [
         {
