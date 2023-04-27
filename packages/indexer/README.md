@@ -1,16 +1,3 @@
-
-# EVMIndex
-
-**EVMIndex** is a plug-and-play blockchain indexer for EVM chains, designed to simplify the process of indexing and retrieving blockchain data. With **EVMIndex**, you can easily set up your own EVM chain indexer on your infrastructure and use simple APIs to retrieve the indexed data.
-
-## Features
-
-- Plug-and-play setup for EVM chain indexing
-- Self-hosted solution for maximum control and privacy
-- Simple APIs for easy data retrieval
-- Lightweight design for efficient performance
-- Webhooks for real-time event notifications
-
 ## Installation
 
 Install dependencies
@@ -29,14 +16,9 @@ cp .env .example.env
 
 Run the Indexer
 ```bash
-npm run dev --[type]
+npm run dev --index-live
 # or 
-yarn dev --[type]
+yarn dev --index-live
 #or
-pnpm dev --[type]
+pnpm dev --index-live
 ```
-> The Indexer requires a command-line argument to run. Here's a list of valid arguments:
-1. `--index-past-logs`: to index only past logs
-2. `--index-live`: to index only live events
-3. `--index-all`: to index both past logs and live events
-    
