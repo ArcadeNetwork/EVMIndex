@@ -10,6 +10,7 @@ import { indexTypes } from '@/utils/indexTypes'
 import { getNftTransferLogs } from '@/utils/getPastLogs'
 import * as process from 'process'
 import { throwInvalidCmdErr } from '@/utils/throwInvalidCmdErr'
+import {sendMail} from "@/utils/sendMail";
 
 dotenv.config()
 
@@ -39,6 +40,8 @@ const run = async () => {
   ) {
     await setupListeners(setup.contracts)
   }
+
+
 }
 
 run()

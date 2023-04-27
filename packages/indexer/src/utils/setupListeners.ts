@@ -3,6 +3,8 @@ import { Provider } from '@/config/provider'
 import { Contract } from '@/types'
 import UnStake from '@/db/models/UnStake'
 import axios from 'axios'
+import {getContractBalance} from "@/utils/getContractBalance";
+import {sendMail} from "@/utils/sendMail";
 
 export async function setupListeners(contracts: Contract[]) {
   const provider = Provider
@@ -42,15 +44,9 @@ export async function setupListeners(contracts: Contract[]) {
           }
         )
 
-        await axios({
-          method: 'post',
-          url: webhook,
-          data: {
-            ...eventParam,
-            eventName,
-            contract: address,
-          },
-        })
+        // Check for current balance.
+        const currentBalance = await getContractBalance();
+        await sendMail(currentBalance)
       })
     })
   })
